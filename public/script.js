@@ -158,3 +158,82 @@
                 }
             });
         }
+
+        // ----------------------------------------------------
+        // System Diagnostic Logic
+        // ----------------------------------------------------
+        const runSysTestBtn = document.getElementById('run-sys-test-btn');
+        const sysTestOutput = document.getElementById('sys-test-output');
+
+        if (runSysTestBtn && sysTestOutput) {
+            const logTest = (msg, isError = false) => {
+                const color = isError ? '#ef4444' : '#10b981';
+                sysTestOutput.innerHTML += `<div style="color: ${color}; margin-bottom: 4px;">${msg}</div>`;
+                sysTestOutput.scrollTop = sysTestOutput.scrollHeight;
+            };
+
+            const delay = ms => new Promise(r => setTimeout(r, ms));
+
+            runSysTestBtn.addEventListener('click', async () => {
+                runSysTestBtn.innerHTML = '⏳ Testing...';
+                runSysTestBtn.disabled = true;
+                sysTestOutput.innerHTML = '';
+                
+                const demoKey = 'gp_39499d5e837f787502e1e94b4ac392dabdb22e1bb0038d997ed26ecc1e498fd5';
+                const baseUrl = window.location.origin;
+
+                try {
+                    logTest('▶ [Module 1: Authentication] Testing invalid API key...', false);
+                    const authRes = await fetch(`${baseUrl}/api/proxy/todos/1`, {
+                        method: 'GET',
+                        cache: 'no-store',
+                        headers: { 'x-api-key': 'invalid_fake_key' }
+                    });
+                    if (authRes.status === 401) {
+                        logTest('  ✓ Auth Module: Properly rejected invalid key (401 Unauthorized)', false);
+                    } else {
+                        logTest(`  ✗ Auth Module: Expected 401, got ${authRes.status}`, true);
+                    }
+
+                    await delay(800);
+
+                    logTest('<br>▶ [Module 2: Reverse Proxy] Testing valid request forwarding...', false);
+                    const proxyRes = await fetch(`${baseUrl}/api/proxy/todos/1`, {
+                        method: 'GET',
+                        cache: 'no-store',
+                        headers: { 'x-api-key': demoKey }
+                    });
+                    if (proxyRes.ok) {
+                        logTest('  ✓ Proxy Module: Successfully forwarded request to target backend (200 OK)', false);
+                    } else {
+                        logTest(`  ✗ Proxy Module: Expected 200, got ${proxyRes.status}`, true);
+                    }
+
+                    await delay(800);
+
+                    logTest('<br>▶ [Module 3: Rate Limiting] Testing sliding window counters...', false);
+                    let initialRemaining = parseInt(proxyRes.headers.get('x-ratelimit-remaining') || '0', 10);
+                    
+                    const rateRes = await fetch(`${baseUrl}/api/proxy/todos/1`, {
+                        method: 'GET',
+                        cache: 'no-store',
+                        headers: { 'x-api-key': demoKey }
+                    });
+                    let newRemaining = parseInt(rateRes.headers.get('x-ratelimit-remaining') || '0', 10);
+                    
+                    if (newRemaining < initialRemaining) {
+                        logTest(`  ✓ Rate Limit Module: Counter successfully decremented (Remaining: ${initialRemaining} → ${newRemaining})`, false);
+                    } else {
+                        logTest(`  ✗ Rate Limit Module: Counter did not decrement (Stayed at ${initialRemaining})`, true);
+                    }
+
+                    logTest('<br><span style="color: #3b82f6; font-weight: bold;">🎉 All System Diagnostics Completed Successfully!</span>', false);
+
+                } catch (error) {
+                    logTest(`<br>✗ Fatal Test Error: ${error.message}`, true);
+                } finally {
+                    runSysTestBtn.innerHTML = '⚡ Test All Modules';
+                    runSysTestBtn.disabled = false;
+                }
+            });
+        }

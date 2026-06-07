@@ -32,7 +32,10 @@ async function forward(req, res) {
 
     res.status(response.status);
     Object.entries(response.headers).forEach(([key, value]) => {
-      res.setHeader(key, value);
+      // Do not let backend overwrite Gateway's rate limit headers
+      if (!key.toLowerCase().startsWith('x-ratelimit-')) {
+        res.setHeader(key, value);
+      }
     });
 
     response.data.pipe(res);

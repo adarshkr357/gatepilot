@@ -109,6 +109,19 @@
                     </div>
                     <pre id="demo-output" style="background: var(--bg-card); padding: 16px; border-radius: 6px; font-size: 13px; color: var(--text-secondary); overflow-x: auto; margin: 0; min-height: 40px; border: 1px solid rgba(255,255,255,0.05);">Click the button above to test the live reverse-proxy...</pre>
                 </div>
+
+                <div class="system-test-card" style="margin-top: 24px; background: rgba(30,30,40,0.5); padding: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <div>
+                            <span style="color: var(--text-secondary); font-size: 15px; font-weight: 600; display: block;">System Diagnostics</span>
+                            <span style="color: var(--text-muted); font-size: 12px;">Automated module testing: Proxy, Auth, and Rate Limiting</span>
+                        </div>
+                        <button id="run-sys-test-btn" style="background: #8b5cf6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif; transition: opacity 0.2s;">⚡ Test All Modules</button>
+                    </div>
+                    <div id="sys-test-output" style="background: var(--bg-card); padding: 16px; border-radius: 6px; font-size: 13px; color: var(--text-secondary); overflow-x: auto; margin: 0; min-height: 100px; border: 1px solid rgba(255,255,255,0.05); font-family: 'JetBrains Mono', monospace; line-height: 1.6;">
+                        Ready to run full diagnostic check...
+                    </div>
+                </div>
             </div>
 
             <div class="doc-section" id="admin-tenants">
