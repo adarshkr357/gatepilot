@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: gatepilot
+      POSTGRES_PASSWORD: gatepilot
+      POSTGRES_DB: gatepilot
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gatepilot"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      DATABASE_URL: postgresql://gatepilot:gatepilot@postgres:5432/gatepilot
+      REDIS_URL: redis://redis:6379
+      TARGET_BASE_URL: http://mock-service:4000
+      ADMIN_TOKEN: dev_admin_token
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mock-service:
+        condition: service_started
+    restart: unless-stopped
+
+  worker:
+    build: .
+    command: node src/workers/webhookWorker.js
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://gatepilot:gatepilot@postgres:5432/gatepilot
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mock-service:
+    build: ./mock-service
+    ports:
+      - "4000:4000"
+    environment:
+      PORT: 4000
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  redisdata:
