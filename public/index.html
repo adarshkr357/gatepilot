@@ -32,9 +32,6 @@
                 
                 <div class="nav-group mt-4">Gateway</div>
                 <a href="#proxy" class="nav-link">Reverse Proxy</a>
-                
-                <div class="nav-group mt-4">Code Examples</div>
-                <a href="#examples" class="nav-link">Multi-Language Setup</a>
 
                 <div class="nav-group mt-4">Admin API</div>
                 <a href="#admin-tenants" class="nav-link">Tenants</a>
@@ -101,198 +98,67 @@
                     <span class="path">/api/proxy/*</span>
                 </div>
                 <p>Appends the wild-card path to the configured <code>TARGET_BASE_URL</code> and forwards the request method, body, and query parameters.</p>
-                <div class="code-block">
-                    <div class="code-header">Example Request</div>
-                    <pre><code>curl -X GET "http://localhost:3000/api/proxy/products" \
-  -H "x-api-key: gp_abc123"</code></pre>
-                </div>
-            </div>
-
-            <div class="doc-section" id="examples">
-                <h2>Multi-Language Examples</h2>
-                <p>Here are copy-and-paste snippets for making proxy requests in popular programming languages.</p>
                 
-                <div class="tabs">
-                    <div class="tab-list">
-                        <button class="tab-btn active" data-lang="js">Node.js</button>
-                        <button class="tab-btn" data-lang="python">Python</button>
-                        <button class="tab-btn" data-lang="go">Go</button>
-                        <button class="tab-btn" data-lang="rust">Rust</button>
-                        <button class="tab-btn" data-lang="java">Java</button>
-                        <button class="tab-btn" data-lang="cpp">C++</button>
-                        <button class="tab-btn" data-lang="php">PHP</button>
-                    </div>
-                    
-                    <div class="tab-content active" id="code-js">
-                        <div class="code-block">
-<pre><code>const axios = require('axios');
-
-axios.get('http://localhost:3000/api/proxy/products', {
-  headers: {
-    'x-api-key': 'gp_your_api_key_here'
-  }
-}).then(response => {
-  console.log(response.data);
-}).catch(console.error);</code></pre>
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="code-python">
-                        <div class="code-block">
-<pre><code>import requests
-
-url = "http://localhost:3000/api/proxy/products"
-headers = {
-    "x-api-key": "gp_your_api_key_here"
-}
-
-response = requests.get(url, headers=headers)
-print(response.json())</code></pre>
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="code-go">
-                        <div class="code-block">
-<pre><code>package main
-
-import (
-    "fmt"
-    "net/http"
-    "io/ioutil"
-)
-
-func main() {
-    client := &http.Client{}
-    req, _ := http.NewRequest("GET", "http://localhost:3000/api/proxy/products", nil)
-    req.Header.Add("x-api-key", "gp_your_api_key_here")
-
-    resp, _ := client.Do(req)
-    defer resp.Body.Close()
-    body, _ := ioutil.ReadAll(resp.Body)
-    
-    fmt.Println(string(body))
-}</code></pre>
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="code-rust">
-                        <div class="code-block">
-<pre><code>use reqwest::header;
-
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut headers = header::HeaderMap::new();
-    headers.insert("x-api-key", header::HeaderValue::from_static("gp_your_api_key_here"));
-
-    let client = reqwest::Client::new();
-    let res = client.get("http://localhost:3000/api/proxy/products")
-        .headers(headers)
-        .send()
-        .await?
-        .text()
-        .await?;
-
-    println!("{}", res);
-    Ok(())
-}</code></pre>
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="code-java">
-                        <div class="code-block">
-<pre><code>import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-
-public class Main {
-    public static void main(String[] args) throws Exception {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("http://localhost:3000/api/proxy/products"))
-            .header("x-api-key", "gp_your_api_key_here")
-            .GET()
-            .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
-    }
-}</code></pre>
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="code-cpp">
-                        <div class="code-block">
-<pre><code>#include &lt;iostream&gt;
-#include &lt;cpr/cpr.h&gt;
-
-int main() {
-    cpr::Response r = cpr::Get(
-        cpr::Url{"http://localhost:3000/api/proxy/products"},
-        cpr::Header{{"x-api-key", "gp_your_api_key_here"}}
-    );
-    std::cout << r.text << std::endl;
-    return 0;
-}</code></pre>
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="code-php">
-                        <div class="code-block">
-<pre><code>&lt;?php
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, "http://localhost:3000/api/proxy/products");
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-    "x-api-key: gp_your_api_key_here"
-));
-$output = curl_exec($ch);
-curl_close($ch);
-echo $output;
-?&gt;</code></pre>
-                        </div>
-                    </div>
-                </div>
+                <div class="auto-code" data-id="proxy-req" data-method="GET" data-path="/api/proxy/products" data-headers='{"x-api-key": "gp_abc123"}'></div>
             </div>
 
             <div class="doc-section" id="admin-tenants">
                 <h2>Admin: Tenants</h2>
                 <p>Manage organizations or individuals using your API gateway.</p>
                 
+                <h3>Create a Tenant</h3>
                 <div class="endpoint">
                     <span class="method post">POST</span>
                     <span class="path">/api/tenants</span>
                 </div>
+                <div class="auto-code" data-id="tenant-create" data-method="POST" data-path="/api/tenants" data-headers='{"x-admin-token": "dev_admin_token", "Content-Type": "application/json"}' data-body='{"name": "Acme Corp", "tier": "enterprise"}'></div>
+
+                <h3 style="margin-top: 48px;">List Tenants</h3>
                 <div class="endpoint">
                     <span class="method get">GET</span>
                     <span class="path">/api/tenants</span>
                 </div>
+                <div class="auto-code" data-id="tenant-list" data-method="GET" data-path="/api/tenants" data-headers='{"x-admin-token": "dev_admin_token"}'></div>
+
+                <h3 style="margin-top: 48px;">Get Tenant by ID</h3>
                 <div class="endpoint">
                     <span class="method get">GET</span>
-                    <span class="path">/api/tenants/:id</span>
+                    <span class="path">/api/tenants/tenant_123</span>
                 </div>
+                <div class="auto-code" data-id="tenant-get" data-method="GET" data-path="/api/tenants/tenant_123" data-headers='{"x-admin-token": "dev_admin_token"}'></div>
             </div>
 
             <div class="doc-section" id="admin-keys">
                 <h2>Admin: API Keys</h2>
                 <p>Manage authentication keys and rate limit quotas for your tenants.</p>
                 
+                <h3>Create an API Key</h3>
                 <div class="endpoint">
                     <span class="method post">POST</span>
                     <span class="path">/api/keys</span>
                 </div>
+                <div class="auto-code" data-id="key-create" data-method="POST" data-path="/api/keys" data-headers='{"x-admin-token": "dev_admin_token", "Content-Type": "application/json"}' data-body='{"tenantId": "tenant_123", "name": "Production Key", "rateLimit": 500, "windowSizeSeconds": 3600}'></div>
+
+                <h3 style="margin-top: 48px;">List API Keys</h3>
                 <div class="endpoint">
                     <span class="method get">GET</span>
                     <span class="path">/api/keys</span>
                 </div>
+                <div class="auto-code" data-id="key-list" data-method="GET" data-path="/api/keys?tenantId=tenant_123" data-headers='{"x-admin-token": "dev_admin_token"}'></div>
+
+                <h3 style="margin-top: 48px;">Update API Key Quotas</h3>
                 <div class="endpoint">
                     <span class="method patch">PATCH</span>
-                    <span class="path">/api/keys/:id</span>
+                    <span class="path">/api/keys/1</span>
                 </div>
+                <div class="auto-code" data-id="key-patch" data-method="PATCH" data-path="/api/keys/1" data-headers='{"x-admin-token": "dev_admin_token", "Content-Type": "application/json"}' data-body='{"rateLimit": 1000, "isActive": true}'></div>
+
+                <h3 style="margin-top: 48px;">Deactivate API Key</h3>
                 <div class="endpoint">
                     <span class="method delete">DELETE</span>
-                    <span class="path">/api/keys/:id</span>
+                    <span class="path">/api/keys/1</span>
                 </div>
+                <div class="auto-code" data-id="key-delete" data-method="DELETE" data-path="/api/keys/1" data-headers='{"x-admin-token": "dev_admin_token"}'></div>
             </div>
 
             <div class="doc-section" id="admin-analytics">
@@ -303,7 +169,9 @@ echo $output;
                     <span class="method get">GET</span>
                     <span class="path">/api/analytics/:tenantId</span>
                 </div>
-                <div class="code-block">
+                <div class="auto-code" data-id="analytics-get" data-method="GET" data-path="/api/analytics/tenant_123" data-headers='{"x-admin-token": "dev_admin_token"}'></div>
+                
+                <div class="code-block" style="margin-top: 24px;">
                     <div class="code-header">Response Example</div>
                     <pre><code>{
   "totalRequests": 1500,
@@ -328,6 +196,80 @@ echo $output;
     </div>
 
     <script>
+        // ----------------------------------------------------
+        // Auto Code Generator for Multi-Language Tabs
+        // ----------------------------------------------------
+        const langs = [
+            { id: 'js', name: 'Node.js' },
+            { id: 'python', name: 'Python' },
+            { id: 'go', name: 'Go' },
+            { id: 'rust', name: 'Rust' },
+            { id: 'java', name: 'Java' },
+            { id: 'cpp', name: 'C++' },
+            { id: 'php', name: 'PHP' }
+        ];
+
+        document.querySelectorAll('.auto-code').forEach(el => {
+            const id = el.getAttribute('data-id');
+            const method = el.getAttribute('data-method');
+            const path = el.getAttribute('data-path');
+            const headersStr = el.getAttribute('data-headers') || '{}';
+            const bodyStr = el.getAttribute('data-body') || '';
+
+            const headers = JSON.parse(headersStr);
+            const bodyObj = bodyStr ? JSON.parse(bodyStr) : null;
+            const url = `http://localhost:3000${path}`;
+
+            const snippets = {
+                js: `const axios = require('axios');\n\naxios({\n  method: '${method}',\n  url: '${url}',\n  headers: {\n${Object.keys(headers).map(k => `    '${k}': '${headers[k]}'`).join(',\n')}\n  }${bodyObj ? `,\n  data: ${JSON.stringify(bodyObj, null, 2)}` : ''}\n}).then(response => {\n  console.log(response.data);\n}).catch(console.error);`,
+                
+                python: `import requests\n\nurl = "${url}"\nheaders = {\n${Object.keys(headers).map(k => `    "${k}": "${headers[k]}"`).join(',\n')}\n}\n${bodyObj ? `json_data = ${JSON.stringify(bodyObj, null, 4)}\n` : ''}\nresponse = requests.${method.toLowerCase()}(url, headers=headers${bodyObj ? ', json=json_data' : ''})\nprint(response.json())`,
+
+                go: `package main\n\nimport (\n    "fmt"\n    "net/http"\n    "io/ioutil"\n${bodyObj ? '    "strings"\n' : ''})\n\nfunc main() {\n    client := &http.Client{}\n${bodyObj ? `    payload := strings.NewReader(\`${JSON.stringify(bodyObj).replace(/"/g, '\\"')}\`)\n` : ''}    req, _ := http.NewRequest("${method}", "${url}", ${bodyObj ? 'payload' : 'nil'})\n${Object.keys(headers).map(k => `    req.Header.Add("${k}", "${headers[k]}")`).join('\n')}\n\n    resp, _ := client.Do(req)\n    defer resp.Body.Close()\n    body, _ := ioutil.ReadAll(resp.Body)\n    fmt.Println(string(body))\n}`,
+
+                rust: `use reqwest::header;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let mut headers = header::HeaderMap::new();\n${Object.keys(headers).map(k => `    headers.insert("${k}", header::HeaderValue::from_static("${headers[k]}"));`).join('\n')}\n\n    let client = reqwest::Client::new();\n    let res = client.${method.toLowerCase()}("${url}")\n        .headers(headers)\n${bodyObj ? `        .json(&serde_json::json!(${JSON.stringify(bodyObj)}))\n` : ''}        .send()\n        .await?\n        .text()\n        .await?;\n\n    println!("{}", res);\n    Ok(())\n}`,
+
+                java: `import java.net.URI;\nimport java.net.http.HttpClient;\nimport java.net.http.HttpRequest;\nimport java.net.http.HttpResponse;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        HttpClient client = HttpClient.newHttpClient();\n        HttpRequest request = HttpRequest.newBuilder()\n            .uri(URI.create("${url}"))\n${Object.keys(headers).map(k => `            .header("${k}", "${headers[k]}")`).join('\n')}\n            .${method}(${bodyObj ? `HttpRequest.BodyPublishers.ofString("${JSON.stringify(bodyObj).replace(/"/g, '\\"')}")` : 'HttpRequest.BodyPublishers.noBody()'})\n            .build();\n\n        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());\n        System.out.println(response.body());\n    }\n}`,
+
+                cpp: `#include <iostream>\n#include <cpr/cpr.h>\n\nint main() {\n    cpr::Response r = cpr::${method === 'GET' ? 'Get' : method === 'POST' ? 'Post' : method === 'PATCH' ? 'Patch' : 'Delete'}(\n        cpr::Url{"${url}"},\n        cpr::Header{${Object.keys(headers).map(k => `{"${k}", "${headers[k]}"}`).join(', ')}}\n${bodyObj ? `        , cpr::Body{"${JSON.stringify(bodyObj).replace(/"/g, '\\"')}"}\n` : ''}    );\n    std::cout << r.text << std::endl;\n    return 0;\n}`,
+
+                php: `<?php\n$ch = curl_init();\ncurl_setopt($ch, CURLOPT_URL, "${url}");\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);\ncurl_setopt($ch, CURLOPT_CUSTOMREQUEST, "${method}");\n${bodyObj ? `curl_setopt($ch, CURLOPT_POSTFIELDS, '${JSON.stringify(bodyObj)}');\n` : ''}curl_setopt($ch, CURLOPT_HTTPHEADER, array(\n${Object.keys(headers).map(k => `    "${k}: ${headers[k]}"`).join(',\n')}\n));\n$output = curl_exec($ch);\ncurl_close($ch);\necho $output;\n?>`
+            };
+
+            let tabsHTML = `<div class="tabs"><div class="tab-list">`;
+            langs.forEach((lang, index) => {
+                tabsHTML += `<button class="tab-btn ${index === 0 ? 'active' : ''}" data-target="${id}-${lang.id}">${lang.name}</button>`;
+            });
+            tabsHTML += `</div>`;
+
+            langs.forEach((lang, index) => {
+                const escapedCode = snippets[lang.id].replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                tabsHTML += `<div class="tab-content ${index === 0 ? 'active' : ''}" id="${id}-${lang.id}">
+                    <div class="code-block"><pre><code>${escapedCode}</code></pre></div>
+                </div>`;
+            });
+            tabsHTML += `</div>`;
+
+            el.innerHTML = tabsHTML;
+        });
+
+        // Event listeners for dynamic tabs
+        document.querySelectorAll('.auto-code .tab-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const container = e.target.closest('.auto-code');
+                container.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                container.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                button.classList.add('active');
+                const targetId = button.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+
+        // ----------------------------------------------------
+        // UI & Scrolling Logic
+        // ----------------------------------------------------
+
         // Mobile Menu Toggle
         const menuToggle = document.querySelector('.menu-toggle');
         const sidebar = document.querySelector('.sidebar');
@@ -336,27 +278,16 @@ echo $output;
             sidebar.classList.toggle('active');
         });
 
-        // Tab switching logic
-        document.querySelectorAll('.tab-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                
-                button.classList.add('active');
-                const lang = button.getAttribute('data-lang');
-                document.getElementById(`code-${lang}`).classList.add('active');
-            });
-        });
-
-        // Smooth scrolling & active state for navigation
+        // Robust Scroll Spy Logic using getBoundingClientRect
         const sections = document.querySelectorAll('.doc-section');
         const navLinks = document.querySelectorAll('.nav-link');
 
         window.addEventListener('scroll', () => {
             let current = 'getting-started';
             sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (window.scrollY >= sectionTop - 250) {
+                const rect = section.getBoundingClientRect();
+                // If the top of the section is anywhere in the upper half of the screen
+                if (rect.top <= window.innerHeight / 2) {
                     current = section.getAttribute('id');
                 }
             });
@@ -368,6 +299,9 @@ echo $output;
                 }
             });
         });
+
+        // Initial check in case user loads page scrolled down
+        window.dispatchEvent(new Event('scroll'));
 
         // Close sidebar on mobile when a link is clicked
         navLinks.forEach(link => {
