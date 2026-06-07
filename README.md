@@ -65,7 +65,7 @@ Client Request
 
 ### Docker (Recommended)
 ```bash
-git clone <repo-url>
+git clone https://github.com/adarshkr357/gatepilot.git
 cd gatepilot
 docker compose up -d
 ```
@@ -202,7 +202,7 @@ GatePilot uses a sliding window algorithm implemented via Redis sorted sets.
 ## Deployment
 For deploying to a VPS:
 ```bash
-git clone <repo>
+git clone https://github.com/adarshkr357/gatepilot.git
 cp .env.example .env
 # Edit .env with real values
 docker compose up -d
