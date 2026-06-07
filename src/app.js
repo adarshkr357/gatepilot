@@ -16,6 +16,9 @@ app.use(cors());
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../public')));
+
 app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
 app.use('/api/tenants', authenticateAdmin, tenantRoutes);

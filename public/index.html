@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GatePilot API Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <div class="logo" style="margin-bottom: 0; padding: 0;">
+                <div class="logo-icon">🚀</div>
+                <span>GatePilot</span>
+            </div>
+            <button class="menu-toggle">☰</button>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo desktop-logo">
+                <div class="logo-icon">🚀</div>
+                <span>GatePilot</span>
+            </div>
+            <nav class="nav-menu">
+                <div class="nav-group">Introduction</div>
+                <a href="#getting-started" class="nav-link active">Getting Started</a>
+                <a href="#authentication" class="nav-link">Authentication</a>
+                <a href="#rate-limits" class="nav-link">Rate Limits</a>
+                
+                <div class="nav-group mt-4">Gateway</div>
+                <a href="#proxy" class="nav-link">Reverse Proxy</a>
+                
+                <div class="nav-group mt-4">Code Examples</div>
+                <a href="#examples" class="nav-link">Multi-Language Setup</a>
+
+                <div class="nav-group mt-4">Admin API</div>
+                <a href="#admin-tenants" class="nav-link">Tenants</a>
+                <a href="#admin-keys" class="nav-link">API Keys</a>
+                <a href="#admin-analytics" class="nav-link">Analytics</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <header class="page-header">
+                <h1 class="page-title">API Documentation</h1>
+                <p class="page-subtitle">Complete reference for the GatePilot Reverse-Proxy API Gateway</p>
+            </header>
+
+            <div class="doc-section" id="getting-started">
+                <h2>Getting Started</h2>
+                <p>Welcome to <strong>GatePilot</strong>. GatePilot sits between your clients and your backend microservices, providing secure API key authentication, tenant-specific rate limiting, async request logging, and webhooks.</p>
+                <div class="info-card">
+                    <div class="info-icon">💡</div>
+                    <div class="info-text">
+                        <strong>Base URL:</strong> <code>http://localhost:3000</code><br>
+                        All API requests must be made over HTTPS in production environments.
+                    </div>
+                </div>
+            </div>
+
+            <div class="doc-section" id="authentication">
+                <h2>Authentication</h2>
+                <p>GatePilot uses two different types of authentication depending on the endpoint you are accessing.</p>
+                
+                <h3>Gateway Proxy Auth</h3>
+                <p>Requests made to the <code>/api/proxy/*</code> routes require an API key in the headers.</p>
+                <div class="code-block">
+                    <div class="code-header">HTTP Header</div>
+                    <pre><code>x-api-key: gp_a1b2c3d4e5f6g7h8...</code></pre>
+                </div>
+
+                <h3>Admin API Auth</h3>
+                <p>Requests made to manage tenants, keys, and view analytics require the admin token.</p>
+                <div class="code-block">
+                    <div class="code-header">HTTP Header</div>
+                    <pre><code>x-admin-token: dev_admin_token</code></pre>
+                </div>
+            </div>
+
+            <div class="doc-section" id="rate-limits">
+                <h2>Rate Limits & Headers</h2>
+                <p>GatePilot enforces sliding-window rate limits per API key using Redis. When a request is made, the following HTTP headers are included in the response:</p>
+                <ul class="feature-list" style="padding-left: 20px; color: var(--text-secondary); margin-bottom: 16px;">
+                    <li><code>X-RateLimit-Limit</code>: The maximum number of requests allowed in the current window.</li>
+                    <li><code>X-RateLimit-Remaining</code>: The number of requests remaining in the current window.</li>
+                    <li><code>X-RateLimit-Reset</code>: The Unix timestamp when the rate limit window resets.</li>
+                </ul>
+                <p>If you exceed the rate limit, the API will return a <code>429 Too Many Requests</code> status code.</p>
+            </div>
+
+            <div class="doc-section" id="proxy">
+                <h2>Reverse Proxy</h2>
+                <p>The core feature of GatePilot. All requests to this endpoint are authenticated, rate-limited, logged, and then forwarded to the target backend service.</p>
+                
+                <div class="endpoint">
+                    <span class="method get">ALL</span>
+                    <span class="path">/api/proxy/*</span>
+                </div>
+                <p>Appends the wild-card path to the configured <code>TARGET_BASE_URL</code> and forwards the request method, body, and query parameters.</p>
+                <div class="code-block">
+                    <div class="code-header">Example Request</div>
+                    <pre><code>curl -X GET "http://localhost:3000/api/proxy/products" \
+  -H "x-api-key: gp_abc123"</code></pre>
+                </div>
+            </div>
+
+            <div class="doc-section" id="examples">
+                <h2>Multi-Language Examples</h2>
+                <p>Here are copy-and-paste snippets for making proxy requests in popular programming languages.</p>
+                
+                <div class="tabs">
+                    <div class="tab-list">
+                        <button class="tab-btn active" data-lang="js">Node.js</button>
+                        <button class="tab-btn" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="go">Go</button>
+                        <button class="tab-btn" data-lang="rust">Rust</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="php">PHP</button>
+                    </div>
+                    
+                    <div class="tab-content active" id="code-js">
+                        <div class="code-block">
+<pre><code>const axios = require('axios');
+
+axios.get('http://localhost:3000/api/proxy/products', {
+  headers: {
+    'x-api-key': 'gp_your_api_key_here'
+  }
+}).then(response => {
+  console.log(response.data);
+}).catch(console.error);</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="code-python">
+                        <div class="code-block">
+<pre><code>import requests
+
+url = "http://localhost:3000/api/proxy/products"
+headers = {
+    "x-api-key": "gp_your_api_key_here"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="code-go">
+                        <div class="code-block">
+<pre><code>package main
+
+import (
+    "fmt"
+    "net/http"
+    "io/ioutil"
+)
+
+func main() {
+    client := &http.Client{}
+    req, _ := http.NewRequest("GET", "http://localhost:3000/api/proxy/products", nil)
+    req.Header.Add("x-api-key", "gp_your_api_key_here")
+
+    resp, _ := client.Do(req)
+    defer resp.Body.Close()
+    body, _ := ioutil.ReadAll(resp.Body)
+    
+    fmt.Println(string(body))
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="code-rust">
+                        <div class="code-block">
+<pre><code>use reqwest::header;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut headers = header::HeaderMap::new();
+    headers.insert("x-api-key", header::HeaderValue::from_static("gp_your_api_key_here"));
+
+    let client = reqwest::Client::new();
+    let res = client.get("http://localhost:3000/api/proxy/products")
+        .headers(headers)
+        .send()
+        .await?
+        .text()
+        .await?;
+
+    println!("{}", res);
+    Ok(())
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="code-java">
+                        <div class="code-block">
+<pre><code>import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("http://localhost:3000/api/proxy/products"))
+            .header("x-api-key", "gp_your_api_key_here")
+            .GET()
+            .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+    }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="code-cpp">
+                        <div class="code-block">
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cpr/cpr.h&gt;
+
+int main() {
+    cpr::Response r = cpr::Get(
+        cpr::Url{"http://localhost:3000/api/proxy/products"},
+        cpr::Header{{"x-api-key", "gp_your_api_key_here"}}
+    );
+    std::cout << r.text << std::endl;
+    return 0;
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="code-php">
+                        <div class="code-block">
+<pre><code>&lt;?php
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, "http://localhost:3000/api/proxy/products");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    "x-api-key: gp_your_api_key_here"
+));
+$output = curl_exec($ch);
+curl_close($ch);
+echo $output;
+?&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="doc-section" id="admin-tenants">
+                <h2>Admin: Tenants</h2>
+                <p>Manage organizations or individuals using your API gateway.</p>
+                
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/tenants</span>
+                </div>
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/tenants</span>
+                </div>
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/tenants/:id</span>
+                </div>
+            </div>
+
+            <div class="doc-section" id="admin-keys">
+                <h2>Admin: API Keys</h2>
+                <p>Manage authentication keys and rate limit quotas for your tenants.</p>
+                
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/keys</span>
+                </div>
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/keys</span>
+                </div>
+                <div class="endpoint">
+                    <span class="method patch">PATCH</span>
+                    <span class="path">/api/keys/:id</span>
+                </div>
+                <div class="endpoint">
+                    <span class="method delete">DELETE</span>
+                    <span class="path">/api/keys/:id</span>
+                </div>
+            </div>
+
+            <div class="doc-section" id="admin-analytics">
+                <h2>Admin: Analytics</h2>
+                <p>View usage statistics, blocked requests, and latency averages for a specific tenant.</p>
+                
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/analytics/:tenantId</span>
+                </div>
+                <div class="code-block">
+                    <div class="code-header">Response Example</div>
+                    <pre><code>{
+  "totalRequests": 1500,
+  "blockedRequests": 50,
+  "avgLatency": 45.2,
+  "uniqueEndpoints": 12,
+  "topEndpoints": [
+    { "path": "/api/proxy/products", "count": 1000 }
+  ],
+  "statusCodeBreakdown": [
+    { "statusCode": 200, "count": 1400 },
+    { "statusCode": 429, "count": 50 }
+  ]
+}</code></pre>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <p>Built with ❤️ by GatePilot</p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        // Tab switching logic
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                button.classList.add('active');
+                const lang = button.getAttribute('data-lang');
+                document.getElementById(`code-${lang}`).classList.add('active');
+            });
+        });
+
+        // Smooth scrolling & active state for navigation
+        const sections = document.querySelectorAll('.doc-section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Close sidebar on mobile when a link is clicked
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
