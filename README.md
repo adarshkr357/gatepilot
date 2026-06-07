@@ -10,6 +10,10 @@
 
 > This will automatically provision PostgreSQL, Redis, set environment variables, run migrations, and start the app.
 
+### Live Demo
+🌐 **[View Live API Documentation](https://gatepilot-app-458fb57eb8a6.herokuapp.com/)**
+*(The live demo proxies requests to `jsonplaceholder.typicode.com`)*
+
 ### Deploy via Heroku CLI
 
 ```bash

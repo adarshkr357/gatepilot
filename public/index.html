@@ -97,7 +97,18 @@
                 </div>
                 <p>Appends the wild-card path to the configured <code>TARGET_BASE_URL</code> and forwards the request method, body, and query parameters.</p>
                 
-                <div class="auto-code" data-id="proxy-req" data-method="GET" data-path="/api/proxy/products" data-headers='{"x-api-key": "gp_abc123"}'></div>
+                <div class="auto-code" data-id="proxy-req" data-method="GET" data-path="/api/proxy/todos/1" data-headers='{"x-api-key": "gp_39499d5e837f787502e1e94b4ac392dabdb22e1bb0038d997ed26ecc1e498fd5"}'></div>
+
+                <div class="live-demo-card" style="margin-top: 24px; background: rgba(30,30,40,0.5); padding: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <div>
+                            <span style="color: var(--text-secondary); font-size: 15px; font-weight: 600; display: block;">Live Playground</span>
+                            <span style="color: var(--text-muted); font-size: 12px;">Send a real request through GatePilot to jsonplaceholder.typicode.com</span>
+                        </div>
+                        <button id="run-demo-btn" style="background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif; transition: opacity 0.2s;">▶️ Send Request</button>
+                    </div>
+                    <pre id="demo-output" style="background: var(--bg-card); padding: 16px; border-radius: 6px; font-size: 13px; color: var(--text-secondary); overflow-x: auto; margin: 0; min-height: 40px; border: 1px solid rgba(255,255,255,0.05);">Click the button above to test the live reverse-proxy...</pre>
+                </div>
             </div>
 
             <div class="doc-section" id="admin-tenants">

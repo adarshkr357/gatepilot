@@ -20,7 +20,7 @@
 
             const headers = JSON.parse(headersStr);
             const bodyObj = bodyStr ? JSON.parse(bodyStr) : null;
-            const url = `http://localhost:3000${path}`;
+            const url = `${window.location.origin}${path}`;
 
             const snippets = {
                 js: `const axios = require('axios');\n\naxios({\n  method: '${method}',\n  url: '${url}',\n  headers: {\n${Object.keys(headers).map(k => `    '${k}': '${headers[k]}'`).join(',\n')}\n  }${bodyObj ? `,\n  data: ${JSON.stringify(bodyObj, null, 2)}` : ''}\n}).then(response => {\n  console.log(response.data);\n}).catch(console.error);`,
@@ -115,3 +115,45 @@
                 }
             });
         });
+
+        // ----------------------------------------------------
+        // Live Playground Logic
+        // ----------------------------------------------------
+        const runDemoBtn = document.getElementById('run-demo-btn');
+        const demoOutput = document.getElementById('demo-output');
+
+        if (runDemoBtn && demoOutput) {
+            runDemoBtn.addEventListener('click', async () => {
+                runDemoBtn.innerHTML = '⏳ Sending...';
+                runDemoBtn.style.opacity = '0.7';
+                demoOutput.innerHTML = 'Waiting for response...';
+                demoOutput.style.color = 'var(--text-secondary)';
+
+                try {
+                    const response = await fetch(`${window.location.origin}/api/proxy/todos/1`, {
+                        method: 'GET',
+                        headers: {
+                            'x-api-key': 'gp_39499d5e837f787502e1e94b4ac392dabdb22e1bb0038d997ed26ecc1e498fd5'
+                        }
+                    });
+
+                    const data = await response.json();
+                    
+                    let headersText = '';
+                    if (response.headers.get('x-ratelimit-remaining')) {
+                        headersText = `// Rate Limit Remaining: ${response.headers.get('x-ratelimit-remaining')}\n`;
+                    }
+
+                    if (response.ok) {
+                        demoOutput.innerHTML = `<span style="color: #10b981;">// Status: ${response.status} OK</span>\n${headersText}\n${JSON.stringify(data, null, 2)}`;
+                    } else {
+                        demoOutput.innerHTML = `<span style="color: #ef4444;">// Status: ${response.status} Error</span>\n${headersText}\n${JSON.stringify(data, null, 2)}`;
+                    }
+                } catch (error) {
+                    demoOutput.innerHTML = `<span style="color: #ef4444;">// Network Error</span>\n${error.message}`;
+                } finally {
+                    runDemoBtn.innerHTML = '▶️ Send Request';
+                    runDemoBtn.style.opacity = '1';
+                }
+            });
+        }
