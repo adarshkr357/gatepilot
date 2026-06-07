@@ -202,11 +202,67 @@ GatePilot uses a sliding window algorithm implemented via Redis sorted sets.
 - Unauthenticated requests rejected before tenant resolution
 
 ## Deployment
-For deploying to a VPS:
+
+### One-Click Heroku Deploy
+
+Click the button below to deploy GatePilot to your own Heroku account instantly. Heroku will automatically provision PostgreSQL, Redis, run migrations, and start the app.
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+### Deploy to Heroku via CLI
+
+If you prefer the command line:
+
+**1. Install & Login**
+```bash
+heroku login
+```
+
+**2. Create the app**
+```bash
+heroku create your-app-name
+```
+
+**3. Provision databases**
+```bash
+heroku addons:create heroku-postgresql:mini
+heroku addons:create heroku-redis:mini
+```
+> Heroku automatically injects `DATABASE_URL` and `REDIS_URL` — no manual config needed for these.
+
+**4. Set environment variables**
+```bash
+heroku config:set NODE_ENV=production
+heroku config:set ADMIN_TOKEN=your_super_secret_token
+heroku config:set TARGET_BASE_URL=https://your-backend-api.com
+```
+
+**5. Deploy the code**
+```bash
+git push heroku main
+```
+
+**6. Run database migrations**
+```bash
+heroku run npm run migrate
+```
+
+**7. Scale the webhook worker**
+```bash
+heroku ps:scale web=1 worker=1
+```
+
+**8. Open your app**
+```bash
+heroku open
+```
+
+### Deploy with Docker (VPS / Self-Hosted)
 ```bash
 git clone https://github.com/adarshkr357/gatepilot.git
+cd gatepilot
 cp .env.example .env
-# Edit .env with real values
+# Edit .env with your real values
 docker compose up -d
 ```
 

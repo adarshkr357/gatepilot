@@ -3,3 +3,7 @@ node_modules/
 .DS_Store
 *.log
 screenshot.*
+check_errors.*
+test-flow.*
+*.png
+*.jpg
