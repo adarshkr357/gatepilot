@@ -2,7 +2,46 @@
 
 **Rate-Limited API Gateway with Multi-Tenant Quotas**
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/adarshkr357/gatepilot)
+## Deploy to Heroku
+
+### One-Click Deploy
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/adarshkr357/gatepilot)
+
+> This will automatically provision PostgreSQL, Redis, set environment variables, run migrations, and start the app.
+
+### Deploy via Heroku CLI
+
+```bash
+# 1. Login
+heroku login
+
+# 2. Create the app
+heroku create your-app-name
+
+# 3. Provision databases (Heroku auto-injects DATABASE_URL & REDIS_URL)
+heroku addons:create heroku-postgresql:mini
+heroku addons:create heroku-redis:mini
+
+# 4. Set environment variables
+heroku config:set NODE_ENV=production
+heroku config:set ADMIN_TOKEN=your_super_secret_token
+heroku config:set TARGET_BASE_URL=https://your-backend-api.com
+
+# 5. Deploy
+git push heroku main
+
+# 6. Run database migrations
+heroku run npm run migrate
+
+# 7. Scale the webhook worker
+heroku ps:scale web=1 worker=1
+
+# 8. Open your app
+heroku open
+```
+
+---
 
 ## Overview
 GatePilot is a reverse-proxy API gateway that authenticates client requests using API keys, enforces tenant-specific rate limits with Redis, logs request activity to PostgreSQL, sends webhook alerts for quota violations, and exposes analytics APIs for usage monitoring.
@@ -16,6 +55,7 @@ GatePilot is a reverse-proxy API gateway that authenticates client requests usin
 - Analytics API with 24-hour usage metrics
 - BullMQ webhook alerts for quota violations
 - Admin API protected by admin token
+- Interactive API documentation page with multi-language code examples
 - Fully containerized with Docker Compose
 - Mock backend service for testing
 
@@ -82,6 +122,15 @@ npm run dev
 npm run worker
 # In another terminal:
 cd mock-service && npm install && npm start
+```
+
+### Deploy with Docker (VPS / Self-Hosted)
+```bash
+git clone https://github.com/adarshkr357/gatepilot.git
+cd gatepilot
+cp .env.example .env
+# Edit .env with your real values
+docker compose up -d
 ```
 
 ## Environment Variables
@@ -201,71 +250,6 @@ GatePilot uses a sliding window algorithm implemented via Redis sorted sets.
 - Parameterized SQL queries (no string concatenation)
 - Unauthenticated requests rejected before tenant resolution
 
-## Deployment
-
-### One-Click Heroku Deploy
-
-Click the button below to deploy GatePilot to your own Heroku account instantly. Heroku will automatically provision PostgreSQL, Redis, run migrations, and start the app.
-
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/adarshkr357/gatepilot)
-
-### Deploy to Heroku via CLI
-
-If you prefer the command line:
-
-**1. Install & Login**
-```bash
-heroku login
-```
-
-**2. Create the app**
-```bash
-heroku create your-app-name
-```
-
-**3. Provision databases**
-```bash
-heroku addons:create heroku-postgresql:mini
-heroku addons:create heroku-redis:mini
-```
-> Heroku automatically injects `DATABASE_URL` and `REDIS_URL` — no manual config needed for these.
-
-**4. Set environment variables**
-```bash
-heroku config:set NODE_ENV=production
-heroku config:set ADMIN_TOKEN=your_super_secret_token
-heroku config:set TARGET_BASE_URL=https://your-backend-api.com
-```
-
-**5. Deploy the code**
-```bash
-git push heroku main
-```
-
-**6. Run database migrations**
-```bash
-heroku run npm run migrate
-```
-
-**7. Scale the webhook worker**
-```bash
-heroku ps:scale web=1 worker=1
-```
-
-**8. Open your app**
-```bash
-heroku open
-```
-
-### Deploy with Docker (VPS / Self-Hosted)
-```bash
-git clone https://github.com/adarshkr357/gatepilot.git
-cd gatepilot
-cp .env.example .env
-# Edit .env with your real values
-docker compose up -d
-```
-
 ## Database Schema
 ```sql
 CREATE TABLE tenants (
@@ -316,10 +300,9 @@ CREATE TABLE request_logs (
 - Prometheus metrics + Grafana dashboards
 - Kubernetes deployment manifests
 
-## Interview Talking Points
-- **Hashing API Keys**: Essential for security; if the DB is compromised, plaintext keys are not exposed.
-- **Redis for Rate Limiting**: Extremely fast, supports atomic operations, and has built-in TTL mechanisms.
-- **Sliding vs Fixed Window**: Sliding window provides a smoother distribution and prevents burst anomalies at window boundaries.
-- **Async Request Logging**: Ensures logging overhead doesn't impact gateway latency (fire-and-forget).
-- **BullMQ for Webhooks**: Background processing is crucial so that webhook delivery doesn't delay HTTP responses. Offers retries out-of-the-box.
-- **Header Sanitization**: Critical in reverse proxies to strip hop-by-hop headers and enforce protocol compliance and security.
+## License
+MIT
+
+---
+
+Built with ❤️ by [Adarsh](https://github.com/adarshkr357)
