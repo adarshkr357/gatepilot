@@ -20,7 +20,7 @@ heroku login
 heroku create your-app-name
 
 # 3. Provision databases (Heroku auto-injects DATABASE_URL & REDIS_URL)
-heroku addons:create heroku-postgresql:mini
+heroku addons:create heroku-postgresql:essential-0
 heroku addons:create heroku-redis:mini
 
 # 4. Set environment variables
