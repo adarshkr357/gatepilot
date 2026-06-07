@@ -1,0 +1,28 @@
+{
+  "name": "GatePilot",
+  "description": "A reverse-proxy API gateway with multi-tenant rate limiting, API key authentication, request logging, and webhook alerts.",
+  "repository": "https://github.com/adarshkr357/gatepilot",
+  "logo": "https://raw.githubusercontent.com/adarshkr357/gatepilot/main/public/favicon.ico",
+  "keywords": ["api", "gateway", "rate-limiting", "proxy", "redis", "postgres"],
+  "env": {
+    "NODE_ENV": {
+      "description": "Environment name",
+      "value": "production"
+    },
+    "ADMIN_TOKEN": {
+      "description": "Secure secret token to access the Admin APIs.",
+      "generator": "secret"
+    },
+    "TARGET_BASE_URL": {
+      "description": "The URL of the backend service to proxy requests to (e.g. https://your-actual-api.com)",
+      "required": true
+    }
+  },
+  "addons": [
+    "heroku-postgresql:mini",
+    "heroku-redis:mini"
+  ],
+  "scripts": {
+    "postdeploy": "npm run migrate"
+  }
+}

@@ -2,6 +2,8 @@
 
 **Rate-Limited API Gateway with Multi-Tenant Quotas**
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 ## Overview
 GatePilot is a reverse-proxy API gateway that authenticates client requests using API keys, enforces tenant-specific rate limits with Redis, logs request activity to PostgreSQL, sends webhook alerts for quota violations, and exposes analytics APIs for usage monitoring.
 
