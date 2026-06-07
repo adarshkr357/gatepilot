@@ -32,7 +32,7 @@ heroku config:set TARGET_BASE_URL=https://your-backend-api.com
 git push heroku main
 
 # 6. Run database migrations
-heroku run npm run migrate
+heroku run node src/config/migrate.js
 
 # 7. Scale the webhook worker
 heroku ps:scale web=1 worker=1
