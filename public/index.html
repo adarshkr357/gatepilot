@@ -322,7 +322,7 @@ echo $output;
             </div>
 
             <footer class="footer">
-                <p>Built with ❤️ by GatePilot</p>
+                <p>Built with ❤️ by <a href="https://github.com/adarshkr357" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 600;">Adarsh</a></p>
             </footer>
         </main>
     </div>
@@ -353,17 +353,17 @@ echo $output;
         const navLinks = document.querySelectorAll('.nav-link');
 
         window.addEventListener('scroll', () => {
-            let current = '';
+            let current = 'getting-started';
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                if (scrollY >= sectionTop - 100) {
+                if (window.scrollY >= sectionTop - 250) {
                     current = section.getAttribute('id');
                 }
             });
 
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('href').includes(current)) {
+                if (link.getAttribute('href') === `#${current}`) {
                     link.classList.add('active');
                 }
             });
