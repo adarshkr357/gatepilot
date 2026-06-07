@@ -2,7 +2,7 @@
 
 **Rate-Limited API Gateway with Multi-Tenant Quotas**
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/adarshkr357/gatepilot)
 
 ## Overview
 GatePilot is a reverse-proxy API gateway that authenticates client requests using API keys, enforces tenant-specific rate limits with Redis, logs request activity to PostgreSQL, sends webhook alerts for quota violations, and exposes analytics APIs for usage monitoring.
@@ -207,7 +207,7 @@ GatePilot uses a sliding window algorithm implemented via Redis sorted sets.
 
 Click the button below to deploy GatePilot to your own Heroku account instantly. Heroku will automatically provision PostgreSQL, Redis, run migrations, and start the app.
 
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/adarshkr357/gatepilot)
 
 ### Deploy to Heroku via CLI
 
