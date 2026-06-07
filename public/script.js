@@ -132,6 +132,7 @@
                 try {
                     const response = await fetch(`${window.location.origin}/api/proxy/todos/1`, {
                         method: 'GET',
+                        cache: 'no-store',
                         headers: {
                             'x-api-key': 'gp_39499d5e837f787502e1e94b4ac392dabdb22e1bb0038d997ed26ecc1e498fd5'
                         }
